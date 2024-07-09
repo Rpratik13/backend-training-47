@@ -1,4 +1,6 @@
-import { User } from "../interfaces/user";
+import bcrypt from "bcrypt";
+
+import { GetUserQuery, User } from "../interfaces/user";
 import * as UserModel from "../model/user";
 
 export function getUserById(id: string) {
@@ -13,6 +15,21 @@ export function getUserById(id: string) {
   return data;
 }
 
-export function createUser(user: User) {
-  UserModel.createUser(user);
+export async function createUser(user: User) {
+  const password = await bcrypt.hash(user.password, 10);
+
+  UserModel.createUser({
+    ...user,
+    password,
+  });
+}
+
+export function getUsers(query: GetUserQuery) {
+  return UserModel.getUsers(query);
+}
+
+export function getUserByEmail(email: string) {
+  const data = UserModel.getUserByEmail(email);
+
+  return data;
 }
