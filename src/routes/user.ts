@@ -1,12 +1,12 @@
 import express from "express";
 
-import { auth } from "../middlewares/auth";
+import { authenticate, authorize } from "../middlewares/auth";
 
 import { createUser, getUserById, getUsers } from "../controller/user";
 
 const router = express();
 
-router.get("/", auth, getUsers);
+router.get("/", authenticate, authorize("users.get"), getUsers);
 
 router.get("/:id", getUserById);
 

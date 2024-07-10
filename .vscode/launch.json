@@ -12,7 +12,8 @@
       "outFiles": ["${workspaceFolder}/**/*.js"],
       "runtimeExecutable": "npm",
       "runtimeArgs": ["start"],
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "outputCapture": "std"
     }
   ]
 }

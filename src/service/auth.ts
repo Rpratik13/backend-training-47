@@ -30,6 +30,7 @@ export async function login(body: Pick<User, "email" | "password">) {
     id: existingUser.id,
     name: existingUser.name,
     email: existingUser.email,
+    permissions: existingUser.permissions,
   };
 
   const accessToken = await sign(payload, config.jwt.secret!, {
