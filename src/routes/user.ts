@@ -3,14 +3,16 @@ import express from "express";
 import { authenticate, authorize } from "../middlewares/auth";
 
 import { createUser, getUserById, getUsers } from "../controller/user";
+import { validateReqBody, validateReqQuery } from "../middlewares/validator";
+import { createUserBodySchema, getUserQuerySchema } from "../schema/user";
 
 const router = express();
 
-router.get("/", authenticate, authorize("users.get"), getUsers);
+router.get("/", validateReqQuery(getUserQuerySchema), getUsers);
 
 router.get("/:id", getUserById);
 
-router.post("/", createUser);
+router.post("/", validateReqBody(createUserBodySchema), createUser);
 
 router.put("/:id", (req, res) => {
   res.json({
