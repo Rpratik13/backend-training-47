@@ -2,7 +2,12 @@ import express from "express";
 
 import { authenticate, authorize } from "../middlewares/auth";
 
-import { createUser, getUserById, getUsers } from "../controller/user";
+import {
+  createUser,
+  getUserById,
+  getUsers,
+  updateUser,
+} from "../controller/user";
 import { validateReqBody, validateReqQuery } from "../middlewares/validator";
 import { createUserBodySchema, getUserQuerySchema } from "../schema/user";
 
@@ -14,11 +19,7 @@ router.get("/:id", getUserById);
 
 router.post("/", validateReqBody(createUserBodySchema), createUser);
 
-router.put("/:id", (req, res) => {
-  res.json({
-    message: "User updated",
-  });
-});
+router.put("/:id", updateUser);
 
 router.delete("/:id", (req, res) => {
   res.json({

@@ -8,13 +8,13 @@ import loggerWithNameSpace from "../utils/logger";
 
 const logger = loggerWithNameSpace("UserController");
 
-export function getUsers(
+export async function getUsers(
   req: Request<any, any, any, GetUserQuery>,
   res: Response
 ) {
   const { query } = req;
 
-  const data = UserService.getUsers(query);
+  const data = await UserService.getUsers(query);
 
   res.json(data);
 }
@@ -36,5 +36,16 @@ export async function createUser(req: Request, res: Response) {
 
   res.json({
     message: "User created",
+  });
+}
+
+export async function updateUser(req: Request, res: Response) {
+  const { body } = req;
+  const { id } = req.params;
+
+  await UserService.updateUser(id, body);
+
+  res.json({
+    message: "User updated",
   });
 }

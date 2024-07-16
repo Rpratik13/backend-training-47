@@ -21,14 +21,33 @@ export function getUserById(id: string) {
 export async function createUser(user: User) {
   const password = await bcrypt.hash(user.password, 10);
 
-  UserModel.createUser({
+  await UserModel.UserModel.create({
     ...user,
     password,
   });
 }
 
-export function getUsers(query: GetUserQuery) {
-  return UserModel.getUsers(query);
+export async function updateUser(id: string, user: User) {
+  const password = await bcrypt.hash(user.password, 10);
+
+  await UserModel.UserModel.update(id, {
+    ...user,
+    password,
+  });
+}
+
+export async function getUsers(query: GetUserQuery) {
+  const data = await UserModel.UserModel.getUsers(query);
+
+  const count = await UserModel.UserModel.count(query);
+
+  const meta = {
+    page: query.page,
+    size: data.length,
+    total: +count.count,
+  };
+
+  return { data, meta };
 }
 
 export function getUserByEmail(email: string) {

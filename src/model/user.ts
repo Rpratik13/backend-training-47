@@ -1,4 +1,63 @@
 import { GetUserQuery, User } from "../interfaces/user";
+import { BaseModel } from "./base";
+
+export class UserModel extends BaseModel {
+  static async create(user: User) {
+    const userToCreate = {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    };
+
+    await this.queryBuilder().insert(userToCreate).table("users");
+  }
+
+  static async update(id: string, user: User) {
+    const userToUpdate = {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      updatedAt: new Date(),
+    };
+
+    const query = this.queryBuilder()
+      .update(userToUpdate)
+      .table("users")
+      .where({ id });
+
+    console.log(query.toString());
+
+    await query;
+  }
+
+  static getUsers(filter: GetUserQuery) {
+    const { q } = filter;
+
+    const query = this.queryBuilder()
+      .select("id", "name", "email")
+      .table("users")
+      .limit(filter.size)
+      .offset((filter.page - 1) * filter.size);
+
+    if (q) {
+      query.whereLike("name", `%${q}%`);
+    }
+
+    return query;
+  }
+
+  static count(filter: GetUserQuery) {
+    const { q } = filter;
+
+    const query = this.queryBuilder().count("*").table("users").first();
+
+    if (q) {
+      query.whereLike("name", `%${q}%`);
+    }
+
+    return query;
+  }
+}
 
 export const users: User[] = [
   {
